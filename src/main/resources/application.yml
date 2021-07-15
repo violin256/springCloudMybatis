@@ -1,0 +1,22 @@
+server:
+  port: 8005
+
+spring:
+  application:
+    name: spring-cloud-mybatis
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/testdb?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: mysql
+
+
+mybatis:
+  type-aliases-package: jzc.cn
+  type-handlers-package: jzc.cn.mapper
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+  mapper-locations: classpath*:mapper/*.xml
+

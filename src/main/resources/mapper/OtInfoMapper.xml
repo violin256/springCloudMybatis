@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jzc.cn.mapper.OtInfoDao" >
+
+    <sql id="Base_Column_List">
+        id,serial_number,client_type,apply_user_id,apply_user_name,apply_dept_id,apply_dept_name,title,start_time,
+        end_time,ot_time_count,ot_reason,audit_result,school_id,create_time,modify_time
+    </sql>
+
+    <select id="selectOtsBySearchInfo" resultType="OtInfo" parameterType="SearchOtInfo">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_oa_ot
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="schoolId != null">AND school_id=#{schoolId}</if>
+            <if test="applyUserId != null"> AND apply_user_id=#{applyUserId}</if>
+            <if test="applyDeptId != null"> AND apply_dept_id=#{applyDeptId}</if>
+            <if test="serialNumber !='' and serialNumber != null"> AND serial_number LIKE CONCAT('%',#{serialNumber},'%')</if>
+            <if test="applyUserName !='' and applyUserName != null"> AND apply_user_name LIKE CONCAT('%',#{applyUserName},'%')</if>
+            <if test="auditResult != null"> AND audit_result=#{auditResult}</if>
+            <if test="startTime != null"> AND create_time >= #{startTime}</if>
+            <if test="endTime != null"> AND #{endTime} >= create_time </if>
+            <if test="startTimeScreening != null and endTimeScreening != null ">
+             AND start_time >= #{startTimeScreening}
+             AND #{endTimeScreening} >= end_time
+            </if>
+            <if test="startTimeScreening != null "> AND start_time >= #{startTimeScreening} </if>
+            <if test="endTimeScreening != null "> AND  #{endTimeScreening} >= end_time </if>
+
+        </trim>
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insert" parameterType="OtInfo" useGeneratedKeys="true" keyProperty="id" >
+        insert into t_oa_ot
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="serialNumber != null">serial_number,</if>
+            <if test="clientType != null">client_type,</if>
+            <if test="applyUserId != null">apply_user_id,</if>
+            <if test="applyUserName != null">apply_user_name,</if>
+            <if test="applyDeptId != null">apply_dept_id,</if>
+            <if test="applyDeptName != null">apply_dept_name,</if>
+            <if test="title != null">title,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="otTimeCount != null">ot_time_count,</if>
+            <if test="otReason != null">ot_reason,</if>
+            <if test="auditResult != null">audit_result,</if>
+            <if test="schoolId != null">school_id,</if>
+            create_time,modify_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="serialNumber != null">#{serialNumber},</if>
+            <if test="clientType != null">#{clientType},</if>
+            <if test="applyUserId != null">#{applyUserId},</if>
+            <if test="applyUserName != null">#{applyUserName},</if>
+            <if test="applyDeptId != null">#{applyDeptId},</if>
+            <if test="applyDeptName != null">#{applyDeptName},</if>
+            <if test="title != null">#{title},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="otTimeCount != null">#{otTimeCount},</if>
+            <if test="otReason != null">#{otReason},</if>
+            <if test="auditResult != null">#{auditResult},</if>
+            <if test="schoolId != null">#{schoolId},</if>
+            now(),now()
+        </trim>
+    </insert>
+
+    <select id="selectById" resultType="OtInfo">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_oa_ot
+        WHERE id =#{id}
+    </select>
+
+    <delete id="deleteById" >
+        DELETE FROM t_oa_ot WHERE id=#{id}
+    </delete>
+
+    <update id="updateById" parameterType="OtInfo">
+        UPDATE t_oa_ot
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+            <if test="applyUserId != null">apply_user_id = #{applyUserId},</if>
+            <if test="applyUserName != null">apply_user_name=#{applyUserName},</if>
+            <if test="applyDeptId != null">apply_dept_id=#{applyDeptId},</if>
+            <if test="applyDeptName != null">apply_dept_name=#{applyDeptName},</if>
+            <if test="title != null">title=#{title},</if>
+            <if test="startTime != null">start_time=#{startTime},</if>
+            <if test="endTime != null">end_time=#{endTime},</if>
+            <if test="otTimeCount != null">ot_time_count=#{otTimeCount},</if>
+            <if test="otReason != null">ot_reason=#{otReason},</if>
+            <if test="auditResult != null">audit_result=#{auditResult},</if>
+            <if test="schoolId != null">school_id=#{schoolId},</if>
+            modify_time=now()
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+
+
+</mapper>
